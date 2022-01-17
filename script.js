@@ -8,13 +8,13 @@ let products = JSON.parse(localStorage.getItem("products"))
         img: "https://img.ltwebstatic.com/images3_pi/2021/07/28/1627438234c1c5955f93c6f8ce1eb324a47532bbfa_thumbnail_600x.webp",
       },
       {
-        title: "Buckle Thong Sandals",
+        title: "Buckle Thong Shoe",
         category: "Shoes",
         price: 99.99,
         img: "https://img.ltwebstatic.com/images3_pi/2022/01/05/164137271522bb9881a6feca73cc6429c8bc447003_thumbnail_600x.webp",
       },
       {
-        title: "Tropical Bikini",
+        title: "Tropical Bikini Swimwear",
         category: "Swimwear",
         price: 149.99,
         img: "https://img.ltwebstatic.com/images3_pi/2020/11/24/1606186155e28fdae787988d1e27d9a2ffb568841d_thumbnail_600x.webp",
@@ -26,18 +26,35 @@ let products = JSON.parse(localStorage.getItem("products"))
         img: "https://img.ltwebstatic.com/images3_pi/2021/06/26/1624696886c23c11eb154e810266e07adf11347e53_thumbnail_600x.webp",
       },
       {
-        title: "Stitch Slide Sandals",
+        title: "Stitch Slide Shoe",
         category: "Shoes",
         price: 158.99,
         img: "https://img.ltwebstatic.com/images3_pi/2022/01/05/16413545052373b8203e2519b70f53ac3e9a48aa47_thumbnail_600x.webp",
       },
       {
-        title: "Leaf Print Swimsuit",
+        title: "Leaf Print Swimwear",
         category: "Swimwear",
         price: 137.99,
         img: "https://img.ltwebstatic.com/images3_pi/2021/12/06/16387572139ef25f50e9437339b275cc91959ac6b1.webp",
       },
+      {
+        title: "Tropical Tunic Dress",
+        category: "Dresses",
+        price: 107.0,
+        img: "https://img.ltwebstatic.com/images3_pi/2021/12/31/164092762974358601831fb9503305f03f17a241c5_thumbnail_600x.webp",
+      },
+      {
+        title: "Tropical Tunic Dress",
+        category: "Dresses",
+        price: 107.0,
+        img: "https://img.ltwebstatic.com/images3_pi/2021/12/31/164092762974358601831fb9503305f03f17a241c5_thumbnail_600x.webp",
+      },
     ];
+
+let cart = JSON.parse(localStorage.getItem("cart"))
+  ? JSON.parse(localStorage.getItem("cart"))
+  : [];
+
 // READ
 function readProducts(products) {
   document.querySelector("#products").innerHTML = "";
@@ -48,19 +65,24 @@ function readProducts(products) {
         <div class="card-body">
           <h5 class="card-title">${product.title}</h5>
           <p class="card-text">R${product.price}</p>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProduct${position}" >
-            Edit
-          </button>
-          <button type="button" class="btn btn-danger" onclick="deleteProduct(${position})" >
-            Delete
-          </button>
-          <button type="button" class="btn btn-secondary" onclick="addToCart(${position})" >
-            Add to cart
-          </button>
-
-
-           
-              <div
+          <div class="d-flex mb-3">
+            <input type="number" class="form-control" value=1 min=1 id="addToCart${position}">
+            <button type="button" class="btn btn-secondary ms-3" onclick="addToCart(${position})"><i class="fas fa-cart-plus"></i></button>
+          </div>
+          
+          
+          
+          </div>
+          <div class="d-flex justify-content-end card-footer">
+            <button type="button" class="btn btn-primary w-50" data-bs-toggle="modal" data-bs-target="#editProduct${position}" >
+              Edit
+            </button>
+            <button type="button" class="btn btn-danger w-50 ms-3" onclick="deleteProduct(${position})" >
+              Delete
+            </button>
+          </div>
+      </div>
+      <div
                 class="modal fade"
                 id="editProduct${position}"
                 tabindex="-1"
@@ -98,8 +120,8 @@ function readProducts(products) {
                           name="editCategory${position}"
                           id="editCategory${position}"
                         >
-                          <option value="Dresses">Dresses</option>
-                          <option value="Shoes">Shoes</option>
+                          <option value="Dress">Dress</option>
+                          <option value="Shoe">Shoe</option>
                           <option value="Swimwear">Swimwear</option>
                         </select>
                       </div>
@@ -144,13 +166,12 @@ function readProducts(products) {
                   </div>
                 </div>
               </div>
-        </div>
-      </div>
     `;
   });
 }
 
 readProducts(products);
+showCartBadge();
 
 // CREATE
 function createProduct() {
@@ -211,15 +232,72 @@ function deleteProduct(position) {
 
 // ADD TO CART
 function addToCart(position) {
-  let title = document.querySelector("#addTitle").value;
-  let category = document.querySelector("#addCategory").value;
-  let price = document.querySelector("#addPrice").value;
-  let img = document.querySelector("#addImg").value;
-  products.push({
-    title,
-    category,
-    price,
-    img,
+  let qty = document.querySelector(`#addToCart${position}`).value;
+  let added = false;
+  cart.forEach((product) => {
+    if (product.title == products[position].title) {
+      alert(
+        `You have successfully added ${qty} ${products[position].title} to the cart`
+      );
+      product.qty = parseInt(product.qty) + parseInt(qty);
+      added = true;
+    }
   });
+
+  showCartBadge();
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+// Update Cart Badge
+function showCartBadge() {
+  document.querySelector("#badge").innerHTML = cart ? cart.length : "";
+}
+
+// SORT BY CATEGORY
+function sortCategory() {
+  let category = document.querySelector("#sortCategory").value;
+
+  if (category == "All") {
+    return readProducts(products);
+  }
+
+  let foundProducts = products.filter((product) => {
+    return product.category == category;
+  });
+
+  readProducts(foundProducts);
+  console.log(foundProducts);
+}
+
+// SORT BY NAME
+
+function sortName() {
+  let direction = document.querySelector("#sortName").value;
+
+  let sortedProducts = products.sort((a, b) => {
+    if (a.title.toLowerCase() < b.title.toLowerCase()) {
+      return -1;
+    }
+    if (a.title.toLowerCase() > b.title.toLowerCase()) {
+      return 1;
+    }
+    return 0;
+  });
+  if (direction == "descending") sortedProducts.reverse();
+  console.log(sortedProducts);
   readProducts(products);
+}
+
+// SORT BY PRICE
+
+function sortPrice() {
+  let direction = document.querySelector("#sortPrice").value;
+
+  let sortedProducts = products.sort((a, b) => a.price - b.price);
+
+  console.log(sortedProducts);
+
+  if (direction == "descending") sortedProducts.reverse();
+  readProducts(sortedProducts);
 }

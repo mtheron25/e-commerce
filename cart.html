@@ -16,48 +16,55 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-      <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container">
         <a class="navbar-brand" href="./index.html">The Closet</a>
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#main_nav"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse justify-content-end" id="main_nav">
-          <ul class="navbar-nav">
-            <li class="nav-item active">
-              <a class="nav-link text-dark" href="./index.html">Home </a>
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarSupportedContent"
+        >
+          <ul class="navbar-nav mb-2 mb-lg-0 mr-auto">
+            <li class="nav-item">
+              <a
+                class="btn btn-primary me-3"
+                aria-current="page"
+                href="./index.html"
+                >Home</a
+              >
             </li>
-            <li class="nav-item active">
-              <a class="nav-link text-dark" href="./cart.html">Cart </a>
+            <li class="nav-item">
+              <a
+                class="btn btn-primary active position-relative"
+                href="./cart.html"
+                >Cart
+                <span
+                  id="badge"
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                ></span
+              ></a>
             </li>
-
-            <div class="searchbar">
-              <form action="javascript:void(0);" onsubmit="searchbar()">
-                <input
-                  type="text"
-                  id="search"
-                  placeholder="Search..."
-                  required
-                />
-                <input type="submit" value="Search" />
-                <input
-                  type="submit"
-                  value="Reset"
-                  onclick="location.reload()"
-                />
-              </form>
-            </div>
           </ul>
         </div>
       </div>
     </nav>
+    <div class="container mt-5 pt-4">
+      <div id="cart"></div>
+      <div
+        id="cart-footer"
+        class="d-flex justify-content-between align-items-center mb-3"
+      ></div>
+    </div>
     <!--External JS-->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
