@@ -43,12 +43,6 @@ let products = JSON.parse(localStorage.getItem("products"))
         price: 107.0,
         img: "https://img.ltwebstatic.com/images3_pi/2021/12/31/164092762974358601831fb9503305f03f17a241c5_thumbnail_600x.webp",
       },
-      {
-        title: "Tropical Tunic Dress",
-        category: "Dresses",
-        price: 107.0,
-        img: "https://img.ltwebstatic.com/images3_pi/2021/12/31/164092762974358601831fb9503305f03f17a241c5_thumbnail_600x.webp",
-      },
     ];
 
 let cart = JSON.parse(localStorage.getItem("cart"))
@@ -243,6 +237,12 @@ function addToCart(position) {
       added = true;
     }
   });
+  if (!added) {
+    cart.push({ ...products[position], qty });
+    alert(
+      `You have successfully added ${qty} ${products[position].title} to the cart`
+    );
+  }
 
   showCartBadge();
 
